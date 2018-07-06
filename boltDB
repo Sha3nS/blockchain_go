@@ -1,0 +1,24 @@
+package main
+
+import (
+"bytes"
+"encoding/gob"
+)
+
+func (b *Block) Serialize() []byte {
+  var result bytes.Buffer
+  encoder := gob.NewEncoder(&result)
+
+  err := encoder.Encode(b) //FIXME
+  return result.Bytes
+}
+
+func DeSerializeBlock(b []byte) *Block {
+		var block Block
+  decoder := gob.NewDecoder(bytes.NewReader(d))
+  err := decoder.Decode(&block)
+
+  return &block
+}
+
+

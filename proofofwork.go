@@ -16,7 +16,7 @@ type PoW struct {
   hard big.Int
 }
 
-func newPoW(b *Block) *PoW {
+func NewPoW(b *Block) *PoW {
   hard := big.NewInt(1)
   hard.Lsh(hard, uint(256 - hardByte))
   pow := &PoW{b, *hard}
@@ -42,7 +42,7 @@ func (pow *PoW) Run() (int, []byte) {
   var hash [32]byte
   nonce := 0
 
-  fmt.Println("Mining the block containing %s", string(pow.block.Data[:]))
+  fmt.Printf("Mining the block containing %s\n", string(pow.block.Data[:]))
   for nonce < maxNonce {
     data := pow.prepareData(nonce)
 	hash = sha256.Sum256(data)
