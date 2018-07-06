@@ -1,0 +1,10 @@
+package main
+
+import(
+)
+
+func main() {
+  bc := NewBlockChain()
+  bc.AddBlock("sent 1 BTC to alpha")
+  bc.AddBlock("sent 2 BTC to beta")
+}

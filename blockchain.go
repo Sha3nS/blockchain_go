@@ -38,7 +38,7 @@ func (bc *BlockChain) AddBlock(data string) {
 	  log.Panic(err)
 	}
 	bc.tip = newBlock.Hash
-	fmt.Println(newBlock.Hash)
+	//fmt.Println(newBlock.Hash)
     return nil
   })
 }
@@ -55,13 +55,14 @@ func NewBlockChain() *BlockChain {
   err = db.Update(func(tx *bolt.Tx) error { //db.View 0400
     b := tx.Bucket([]byte(blocksBucket))
     if b == nil {
+	  fmt.Println("No existing blockchain found. Creating a new one...")
 	  genesis := GenesisBlock()
 	  b, err := tx.CreateBucket([]byte(blocksBucket))
 	  if err != nil {
 		log.Panic(err)
 	  }
+
 	  err = b.Put(genesis.Hash, genesis.Serialize())
-	  fmt.Printf("genesis.Hash = %x\ngenesis.Serialize = %x\n", genesis.Hash, genesis.Serialize())
 	  if err != nil {
         log.Panic(err)
       }
@@ -86,7 +87,6 @@ type BlockChainInspect struct {
 
 func (bc *BlockChain) Inspect() *BlockChainInspect {
   bci := &BlockChainInspect{bc.tip, bc.db}
-  fmt.Printf("bci %x\n", *bci)
   return bci
 }
 
@@ -96,17 +96,13 @@ func (bci *BlockChainInspect) Next() *Block {
   err := bci.db.View(func(tx *bolt.Tx) error {
     b := tx.Bucket([]byte(blocksBucket))
 	encodedBlock := b.Get(bci.CurrentHash)
-	fmt.Printf("bci.CurrentHash = %x\nget = %x\n", bci.CurrentHash, b.Get(bci.CurrentHash))//ok
 	block = DeSerializeBlock(encodedBlock)
-	//fmt.Printf("bci.block = %x\n", b.Get(bci.CurrentHash))
 	return nil
   })
   if err != nil {
 	log.Panic(err)
   }
   bci.CurrentHash = block.PrevHash
-  fmt.Printf("Next.CurrentHash = %x\n", bci.CurrentHash)
-  fmt.Printf("block.Next.Hash = %x\n", block.Hash)
   return block
 }
 
