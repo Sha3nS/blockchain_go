@@ -11,7 +11,9 @@ excu printchain  //to print blockchain
 excu addblock -data "payment infomation"  //to add a block to databse with PoW consensus trick
 
 make
+
 ./excu printchain
+
 ./excu addblock -data "payment infomation"
 
 try this out!!
